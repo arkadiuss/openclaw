@@ -235,10 +235,8 @@ WORKDIR /app
 # so it must be installed explicitly here. Without it `/etc/ssl/certs/`
 # stays empty and every HTTPS outbound dies at TLS handshake with
 # `error setting certificate file`.
-# `openssh-client` provides the `ssh` binary that the SSH sandbox backend
-# spawns directly (`src/agents/sandbox/ssh.ts`). Without it, every SSH-backed
-# sandbox fails at session start with `spawn ssh ENOENT`, and `git` cannot use
-# SSH remotes even though `git` itself is installed.
+# The runtime image must include the SSH client because the sandbox backend
+# spawns `ssh` directly, and bookworm-slim does not provide it.
 # Apply current Debian point-release security fixes even when the pinned base
 # digest predates them, without waiting for a base-digest refresh.
 RUN --mount=type=cache,id=openclaw-bookworm-apt-cache,target=/var/cache/apt,sharing=locked \
